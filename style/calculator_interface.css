@@ -1,0 +1,13 @@
+button {
+    /* width: 25%; */
+    background: gray;
+    /* border-radius: 5px; */
+    /* border: 1px solid darkgray; */
+    font-size: min(5vh, 7vw);
+    text-align: center;
+}
+
+.affichage>* {
+    background: gray;
+    border: 0;
+}

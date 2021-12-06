@@ -1,0 +1,58 @@
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculatrice - Météo</title>
+    <link rel="stylesheet" href="style/calculator_interface.css">
+    <link rel="stylesheet" href="style/calculator_grid.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- <link rel="stylesheet" href="style/test.css"> -->
+</head>
+
+<body>
+
+    <article class="calculatrice">
+
+        <section class="affichage">
+            <input type="text" class="out_operation" id="Display" value="" readonly/>
+            <input type="text" class="result" readonly value="2+3" />
+        </section>
+        <section class="more"></section>
+        <section class="base">
+
+            <section class="more_op">
+                <button class="button num">AC</button>
+                <button class="button num">()</button>
+                <button class="button num">&Sqrt;</button>
+            </section>
+            <section class="numpad">
+                <button class="button num" onclick="test('7')">7</button>
+                <button class="button num" onclick="test('8')">8</button>
+                <button class="button num" onclick="test('9')">9</button>
+                <button class="button num" onclick="test('4')">4</button>
+                <button class="button num" onclick="test('5')">5</button>
+                <button class="button num" onclick="test('6')">6</button>
+                <button class="button num" onclick="test('1')">1</button>
+                <button class="button num" onclick="test('2')">2</button>
+                <button class="button num" onclick="test('3')">3</button>
+                <button class="button num" onclick="test('0')">0</button>
+                <button class="button num" onclick="test('.')">,</button>
+                <!-- <button class="button num"><span class="material-icons">backspace</span></button> -->
+            </section>
+            <section class="operation">
+                <button class="button op" onclick="test('/')">&#247;</button>
+                <button class="button op" onclick="test('*')">&#215;</button>
+                <button class="button op" onclick="test('-')">-</button>
+                <button class="button op" onclick="test('+')">+</button>
+                <button class="button op" onclick="test('=')">=</button>
+            </section>
+        </section>
+    </article>
+
+</body>
+
+</html>
+<script src="script/script.js" type="module"></script>
