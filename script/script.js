@@ -82,7 +82,7 @@ function PopulateMeteo(jsonObj) {
 
     var img = document.createElement('img');
 
-    img.src = "http:" + jsonObj.current.condition.icon;
+    img.src = "https:" + jsonObj.current.condition.icon;
     img.alt = jsonObj.current.condition.text;
     img.title = jsonObj.current.condition.text;
 
