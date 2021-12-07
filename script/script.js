@@ -131,8 +131,14 @@ function ToggleMeteo() {
     section.classList.toggle("open");
 }
 
+function ToggleXkey() {
+    var section = document.getElementById('XKey');
+    section.classList.toggle("open");
+}
+
 TestMeteo()
 window.Input = doInput
 window.Clear = Clear
 window.Delete = Delete
 window.ToggleMeteo = ToggleMeteo
+window.ToggleXkey = ToggleXkey
