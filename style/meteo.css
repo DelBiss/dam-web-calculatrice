@@ -1,0 +1,126 @@
+.MeteoItem,
+.condition_text {
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    align-content: stretch;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.location,
+.condition,
+.temperature {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    align-content: flex-start;
+}
+
+.location {
+    align-items: first baseline;
+    padding-inline: 0.2em;
+}
+
+.MeteoItem {
+    background-color: #4a54b3;
+    border-color: black;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    margin-block: 0.2em;
+    margin-inline: 0.2em;
+}
+
+.MeteoItem p {
+    margin-inline: 0.15em;
+    margin-block: 0;
+}
+
+.condition {
+    /* background-color: #b99401; */
+}
+
+.condition_text {
+    margin-inline: 0.2em;
+}
+
+.temperature {
+    flex-direction: column;
+}
+
+.temperature p::after {
+    content: "℃";
+}
+
+.resenti {
+    font-size: 0.7em;
+}
+
+.resenti::before {
+    content: "Resenti:";
+}
+
+
+/* --------------------------- */
+
+.courant {
+    font-size: 0.8em;
+}
+
+.condition img {
+    height: 3vh;
+    object-fit: cover;
+    width: 6vh;
+}
+
+.textuelle,
+.resenti,
+.province {
+    display: none;
+}
+
+.resenti {
+    display: none;
+}
+
+.ville {
+    font-weight: 600;
+    font-size: 1em;
+}
+
+
+/* --------------------------- */
+
+#meteo.open .location {
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+}
+
+#meteo.open .textuelle,
+#meteo.open .resenti,
+#meteo.open .province {
+    display: block;
+}
+
+#meteo.open .MeteoItem,
+#meteo.open .condition_text {
+    flex-direction: column;
+}
+
+#meteo.open .courant {
+    font-size: 1.5em;
+}
+
+#meteo.open .ville {
+    font-weight: 600;
+    font-size: 1.2em;
+}
+
+#meteo.open .condition img {
+    height: 100%;
+    width: 100%;
+}

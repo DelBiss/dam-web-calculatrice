@@ -42,14 +42,11 @@ body {
 
 .more {
     background-color: blue;
-    min-height: 3vh;
+    display: flex;
+    flex-direction: row;
+    /* min-height: 3vh; */
     flex: 0 1 auto;
     transition: all 1s cubic-bezier(0.075, 0.82, 0.165, 1);
-}
-
-.more:hover {
-    background-color: red;
-    min-height: 12vh;
 }
 
 .base {
@@ -108,7 +105,7 @@ body {
     pointer-events: all;
 }
 
-.drawer:hover {
+.drawer.open {
     width: 100%;
 }
 
