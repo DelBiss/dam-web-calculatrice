@@ -266,8 +266,7 @@ class Equation {
 
                         case CalcState.RESULT:
                             var cr = this.getValue()
-                            this.append(new CalcNumber)
-                            this.OnInput(cr)
+                            this.append(new CalcNumber(cr))
                             this.OnInput(c)
                             break;
                         default:
