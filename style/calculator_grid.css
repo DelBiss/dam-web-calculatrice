@@ -44,7 +44,12 @@ body {
     background-color: blue;
     min-height: 3vh;
     flex: 0 1 auto;
-    /* transition: all 1s cubic-bezier(0.55, 0.055, 0.675, 0.19); */
+    transition: all 1s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.more:hover {
+    background-color: red;
+    min-height: 12vh;
 }
 
 .base {
@@ -80,11 +85,6 @@ body {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: var(--grid-gap);
-}
-
-.more:hover {
-    background-color: red;
-    /* height: 20vh; */
 }
 
 .overlay {
