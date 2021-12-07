@@ -1,14 +1,17 @@
 const InputType = Object.freeze({
     NUMBER: { char: "0123456789", name: "INPUT.NUMBER" },
     NUMBER_MOD: { char: "N", name: "INPUT.NUMBER_MOD" },
+    PARENTHESIS_OPEN: { char: "(", name: "INPUT.PARENTHESIS_OPEN" },
+    PARENTHESIS_CLOSE: { char: ")", name: "INPUT.PARENTHESIS_CLOSE" },
     DECIMAL: { char: ".,", name: "INPUT.DECIMAL" },
     EQUAL: { char: "=" + String.fromCharCode(13), name: "INPUT.EQUAL" },
     OPERATION: { char: "+-*/", name: "INPUT.OPERATION" },
-    DELETE: { char: String.fromCharCode(8, 83), name: "INPUT.DELETE" }
+    DELETE: { char: String.fromCharCode(8, 83), name: "INPUT.DELETE" },
+    NONE: { char: "", name: "INPUT.NONE" }
 });
 
 function GetInputType(input) {
-    var it = null;
+    var it = InputType.NONE;
     for (const key in InputType) {
 
         if (InputType[key].char.indexOf(input) >= 0) {
@@ -21,6 +24,8 @@ function GetInputType(input) {
 
 const CalcState = Object.freeze({
     NUMBER: { input: [InputType.NUMBER, InputType.DECIMAL, InputType.NUMBER_MOD], name: "STATE.NUMBER" },
+    PARENTHESIS_OPEN: { input: [InputType.PARENTHESIS_OPEN], name: "STATE.PARENTHESIS_OPEN" },
+    PARENTHESIS_CLOSE: { input: [InputType.PARENTHESIS_CLOSE], name: "STATE.PARENTHESIS_CLOSE" },
     RESULT: { input: [InputType.EQUAL], name: "STATE.RESULT" },
     OPERATOR: { input: [InputType.OPERATION], name: "STATE.OPERATOR" },
     DELETE: { input: [InputType.DELETE], name: "STATE.DELETE" },
@@ -66,6 +71,61 @@ class CalcBlock {
 
     GetEvalStr() {
         return this.value;
+    }
+
+    GetCurrentStr() {
+        return "0";
+    }
+}
+class CalcParentesis extends CalcBlock {
+    constructor(value = null) {
+        super();
+        this.value = new Equation(value);
+        this.state = CalcState.PARENTHESIS_OPEN;
+        this.isClose = false
+    }
+
+    OnInput(input) {
+        if ((GetInputState(input) === CalcState.PARENTHESIS_CLOSE) &&
+            (this.value.state != CalcState.PARENTHESIS_OPEN)) {
+            this.Close()
+        } else {
+            this.value.OnInput(input)
+        }
+    }
+
+    Close() {
+        if (this.value.state === CalcState.PARENTHESIS_OPEN) {
+            this.value.OnInput(")")
+        }
+        this.isClose = true
+        this.state = CalcState.PARENTHESIS_CLOSE
+    }
+
+    GetEvalStr() {
+        return "(" + this.value.evalStr + ")"
+    }
+
+    GetDisplayStr() {
+        var sReturn = "(";
+        sReturn += this.value.displayStr
+
+        if (this.isClose) {
+            if (this.value.state == CalcState.NUMBER) {
+                sReturn += this.value.currentStr
+            }
+            sReturn += ")"
+        }
+
+        return sReturn
+    }
+
+    GetCurrentStr() {
+        if (this.state === CalcState.PARENTHESIS_OPEN) {
+            return this.value.currentStr
+        } else {
+            return "0"
+        }
     }
 }
 
@@ -126,7 +186,7 @@ class CalcNumber extends CalcBlock {
     }
 
     GetValue() {
-        return Number(this.GetEvalStr)
+        return Number(this.GetEvalStr())
     }
 
     SetValue(value = null) {
@@ -155,6 +215,10 @@ class CalcNumber extends CalcBlock {
             myValue = "-" + myValue;
         }
         return String(Number(myValue));
+    }
+
+    GetCurrentStr() {
+        return this.GetDisplayStr();
     }
 }
 
@@ -196,6 +260,10 @@ class CalcResult extends CalcBlock {
         return "";
     }
 
+    GetCurrentStr() {
+        return this.GetDisplayStr();
+    }
+
     GetValue() {
         return Number(this.value)
     }
@@ -218,7 +286,7 @@ class Equation {
 
     OnInput(input) {
         for (var c of input) {
-
+            console.log(`Input: ${c}: ${GetInputState(c).name} in ${this.state.name}`)
             switch (this.state) {
                 case CalcState.NONE:
                     switch (GetInputState(c)) {
@@ -227,11 +295,18 @@ class Equation {
                             this.append(new CalcNumber())
                             this.OnInput(c)
                             break
+                        case CalcState.NONE:
+                            break
+                        case CalcState.PARENTHESIS_OPEN:
+
+                            this.append(new CalcParentesis())
+                            break;
 
                         default:
-                            console.log(GetInputState(c).name + " aren't handle when in " + this.state.name)
+                            console.log(GetInputType(c).name + " aren't handle when in " + this.state.name)
                     }
                     break;
+
 
                 case CalcState.NUMBER:
                     switch (GetInputState(c)) {
@@ -249,8 +324,22 @@ class Equation {
                             this.append(new CalcResult(this.evalStr))
                             break;
 
+                        case CalcState.PARENTHESIS_OPEN:
+                            // var temp = this.tail;
+                            var parenthe = new CalcParentesis(this.tail.GetValue());
+                            this.replaceLast(parenthe)
+                                // parenthe.previous = this.tail.previous
+                                // if (parenthe.previous != null) {
+                                //     parenthe.previous.next = parenthe
+                                // } else {
+                                //     this.head = parenthe
+                                // }
+                                // this.tail = parenthe
+                                // this.state = this.tail.state
+                            break
+
                         default:
-                            console.log(GetInputState(c).name + " aren't handle when in " + this.state.name)
+                            console.log(GetInputType(c).name + " aren't handle when in " + this.state.name)
                     }
                     break;
                 case CalcState.OPERATOR:
@@ -269,10 +358,41 @@ class Equation {
                             this.append(new CalcNumber(cr))
                             this.OnInput(c)
                             break;
+
+                        case CalcState.PARENTHESIS_OPEN:
+                            this.append(new CalcParentesis())
+                            break;
                         default:
                             console.log(GetInputState(c).name + " aren't handle when in " + this.state.name)
                     }
                     break;
+
+                case CalcState.PARENTHESIS_OPEN:
+                    switch (GetInputState(c)) {
+                        case CalcState.RESULT:
+                            this.tail.Close()
+                            this.state = this.tail.state
+                            this.OnInput(c)
+                            break
+                        default:
+                            this.tail.OnInput(c)
+                            this.state = this.tail.state
+                            break
+                    }
+                    break
+
+                case CalcState.PARENTHESIS_CLOSE:
+                    switch (GetInputState(c)) {
+                        case CalcState.OPERATOR:
+                            this.append(new CalcOperator())
+                            this.OnInput(c)
+                            break;
+
+                        case CalcState.RESULT:
+                            this.append(new CalcResult(this.evalStr))
+                            break;
+                    }
+                    break
                 default:
                     break;
             }
@@ -285,6 +405,14 @@ class Equation {
         } else {
             return Number(CalcResult.GetResult(this.evalStr))
         }
+    }
+    replaceLast(value) {
+        var temp = this.tail
+        this.tail = temp.previous
+        this.length--
+            // if (this.length == 1)
+            this.append(value)
+        return temp
     }
     append(value) {
         if (this.tail === null) {
@@ -312,15 +440,17 @@ class Equation {
     }
 
     get currentStr() {
-        if (this.state === CalcState.NUMBER || this.state === CalcState.RESULT) {
-            return this.tail.GetDisplayStr()
+        if (this.tail != null) {
+            return this.tail.GetCurrentStr()
         }
         return "0"
     }
+
     get displayStr() {
         var sReturn = ""
         var last = 0;
         if (this.state === CalcState.NUMBER || this.state === CalcState.RESULT) {
+
             last = -1;
         }
 
@@ -330,6 +460,7 @@ class Equation {
         if (this.state === CalcState.RESULT) {
             sReturn += " ="
         }
+        console.log(`Display at ${this.state.name} : ${sReturn}`)
         return sReturn
     }
 
@@ -465,6 +596,11 @@ export default class Calulatrice {
                         this.CreateNewEquation()
                         this.OnInput(c)
                         break;
+
+                    case CalcState.PARENTHESIS:
+                        if (GetInputType(c) === InputType.PARENTHESIS_CLOSE) {
+                            break;
+                        }
                     case CalcState.OPERATOR:
                         var lastResult = this.current.getValue()
                         this.CreateNewEquation(lastResult)
@@ -478,7 +614,7 @@ export default class Calulatrice {
                         this.OnInput(lastOperation + c)
                         break
                 }
-            } else if ((this.current.length == 1) && (GetInputState(c) === CalcState.RESULT)) {
+            } else if ((GetInputState(c) === CalcState.RESULT) && (this.current.length == 1) && (this.current.state === CalcState.NUMBER)) {
                 var prevEquation = this.history[this.history.length - 1]
                 this.OnInput(prevEquation.lastOperation + c)
             } else {

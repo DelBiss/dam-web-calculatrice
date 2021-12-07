@@ -34,6 +34,7 @@ function Clear() {
 }
 
 function Refresh() {
+    // document.getElementById("Display").value = myCalcul.state.name + " -> " + myCalcul.displayStr;
     document.getElementById("Display").value = myCalcul.displayStr;
     document.getElementById("Current").value = myCalcul.currentStr;
 }
