@@ -36,9 +36,7 @@ function Clear() {
 function Refresh() {
     document.getElementById("Display").value = myCalcul.displayStr;
 }
-window.Input = doInput
-window.Clear = Clear
-window.Delete = Delete
+
 
 function TestMeteo() {
     let requestURL = 'http://api.weatherapi.com/v1/current.json?key=f111c71466e14bca870155327210212%20&q=Montreal&aqi=no&lang=fr';
@@ -55,9 +53,10 @@ function TestMeteo() {
 
 }
 
-var section = document.getElementById('meteo');
+
 
 function PopulateMeteo(jsonObj) {
+    var section = document.getElementById('meteo');
     var myArticle = document.createElement('article');
     myArticle.className = "MeteoItem";
 
@@ -127,4 +126,13 @@ function PopulateMeteo(jsonObj) {
 
 }
 
+function ToggleMeteo() {
+    var section = document.getElementById('meteo');
+    section.classList.toggle("open");
+}
+
 TestMeteo()
+window.Input = doInput
+window.Clear = Clear
+window.Delete = Delete
+window.ToggleMeteo = ToggleMeteo
