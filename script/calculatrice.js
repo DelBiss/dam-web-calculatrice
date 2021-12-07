@@ -334,6 +334,9 @@ export default class Calulatrice {
         this.current = new Equation()
     }
 
+    Clear() {
+        this.current = new Equation()
+    }
     get evalStr() {
         return this.current.evalStr
     }

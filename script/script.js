@@ -24,4 +24,9 @@ function doInput(val) {
     }
 }
 
-window.test = doInput
+function Clear() {
+    myCalcul.Clear()
+    document.getElementById("Display").value = myCalcul.displayStr;
+}
+window.Input = doInput
+window.Clear = Clear
