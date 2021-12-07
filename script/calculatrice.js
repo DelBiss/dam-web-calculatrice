@@ -1,5 +1,6 @@
 const InputType = Object.freeze({
     NUMBER: { char: "0123456789", name: "INPUT.NUMBER" },
+    NUMBER_MOD: { char: "N", name: "INPUT.NUMBER_MOD" },
     DECIMAL: { char: ".,", name: "INPUT.DECIMAL" },
     EQUAL: { char: "=" + String.fromCharCode(13), name: "INPUT.EQUAL" },
     OPERATION: { char: "+-*/", name: "INPUT.OPERATION" },
@@ -19,7 +20,7 @@ function GetInputType(input) {
 }
 
 const CalcState = Object.freeze({
-    NUMBER: { input: [InputType.NUMBER, InputType.DECIMAL], name: "STATE.NUMBER" },
+    NUMBER: { input: [InputType.NUMBER, InputType.DECIMAL, InputType.NUMBER_MOD], name: "STATE.NUMBER" },
     RESULT: { input: [InputType.EQUAL], name: "STATE.RESULT" },
     OPERATOR: { input: [InputType.OPERATION], name: "STATE.OPERATOR" },
     DELETE: { input: [InputType.DELETE], name: "STATE.DELETE" },
@@ -69,19 +70,21 @@ class CalcBlock {
 }
 
 class CalcNumber extends CalcBlock {
-    constructor() {
+    constructor(value = null) {
         super();
         this.value = "0"
-        this._isDecimal = false;
+        this.isDecimal = false;
+        this.isNegative = false;
         this.state = CalcState.NUMBER
+        this.SetValue(value)
     }
 
     OnInput(input) {
         if (!super.OnInput(input)) {
             switch (GetInputType(input)) {
                 case InputType.DECIMAL:
-                    if (!this._isDecimal) {
-                        this._isDecimal = true;
+                    if (!this.isDecimal) {
+                        this.isDecimal = true;
                         this.value += "."
                     }
                     break;
@@ -91,8 +94,21 @@ class CalcNumber extends CalcBlock {
                     break;
 
                 case InputType.NUMBER:
-                    this.value += input
+                    if (this.value == "0") {
+                        this.value = input
+                    } else {
+                        this.value += input
+                    }
                     break;
+                case InputType.NUMBER_MOD:
+                    switch (input) {
+                        case "N":
+                            this.isNegative = !this.isNegative
+                            break;
+                        default:
+                            console.log(InputType.NUMBER_MOD.name + "[${input}] isn't handled")
+                            break
+                    }
             }
         }
         return true
@@ -103,17 +119,42 @@ class CalcNumber extends CalcBlock {
             this.value = "0"
         } else {
             if (this.value[this.value.length - 1] == ".") {
-                this._isDecimal = false
+                this.isDecimal = false
             }
             this.value = this.value.substr(0, this.value.length - 1)
         }
     }
 
-    GetDisplayStr() {
-        return String(Number(this.value));
+    GetValue() {
+        return Number(this.GetEvalStr)
     }
+
+    SetValue(value = null) {
+        if (value != null) {
+            if (value < 0) {
+                this.isNegative = true
+            }
+            this.value = String(Math.abs(value))
+        }
+    }
+
+    GetDisplayStr() {
+        var myValue = this.value;
+        if (this.isNegative) {
+            myValue = "-" + myValue;
+        }
+        if (this.next === null) {
+            return myValue;
+        }
+        return String(Number(myValue));
+    }
+
     GetEvalStr() {
-        return String(Number(this.value));
+        var myValue = this.value;
+        if (this.isNegative) {
+            myValue = "-" + myValue;
+        }
+        return String(Number(myValue));
     }
 }
 
@@ -142,7 +183,9 @@ class CalcResult extends CalcBlock {
     }
 
     static GetResult(evalStr) {
-        return String(eval(evalStr))
+        var nResult = eval(evalStr)
+
+        return String(Math.round(nResult * 10 ** 8) / 10 ** 8)
     }
 
     GetDisplayStr() {
@@ -153,16 +196,24 @@ class CalcResult extends CalcBlock {
         return "";
     }
 
+    GetValue() {
+        return Number(this.value)
+    }
+
     OnInput(input) { return true };
 
 }
 
 class Equation {
-    constructor() {
+    constructor(value = null) {
         this.head = null;
         this.tail = this.head;
         this.length = 0;
         this.state = CalcState.NONE
+
+        if (value != null) {
+            this.append(new CalcNumber(value))
+        }
     }
 
     OnInput(input) {
@@ -231,9 +282,9 @@ class Equation {
 
     getValue() {
         if (this.state === CalcState.RESULT) {
-            return this.tail.value
+            return this.tail.GetValue()
         } else {
-            return CalcResult.GetResult(this.evalStr)
+            return Number(CalcResult.GetResult(this.evalStr))
         }
     }
     append(value) {
@@ -329,9 +380,9 @@ export default class Calulatrice {
         this.history = [];
     }
 
-    CreateNewEquation() {
+    CreateNewEquation(value = null) {
         this.history.push(this.current)
-        this.current = new Equation()
+        this.current = new Equation(value)
     }
 
     Clear() {
@@ -355,15 +406,15 @@ export default class Calulatrice {
                         break;
                     case CalcState.OPERATOR:
                         var lastResult = this.current.getValue()
-                        this.CreateNewEquation()
-                        this.OnInput(lastResult + c)
+                        this.CreateNewEquation(lastResult)
+                        this.OnInput(c)
                         break
 
                     case CalcState.RESULT:
                         var lastResult = this.current.getValue()
                         var lastOperation = this.current.lastOperation
-                        this.CreateNewEquation()
-                        this.OnInput(lastResult + lastOperation + c)
+                        this.CreateNewEquation(lastResult)
+                        this.OnInput(lastOperation + c)
                         break
                 }
             } else if ((this.current.length == 1) && (GetInputState(c) === CalcState.RESULT)) {
