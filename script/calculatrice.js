@@ -189,7 +189,7 @@ class CalcResult extends CalcBlock {
     }
 
     GetDisplayStr() {
-        return " = " + this.value;
+        return this.value;
     }
 
     GetEvalStr() {
@@ -311,10 +311,24 @@ class Equation {
         return sReturn
     }
 
+    get currentStr() {
+        if (this.state === CalcState.NUMBER || this.state === CalcState.RESULT) {
+            return this.tail.GetDisplayStr()
+        }
+        return "0"
+    }
     get displayStr() {
         var sReturn = ""
-        for (var block of this.generator()) {
+        var last = 0;
+        if (this.state === CalcState.NUMBER || this.state === CalcState.RESULT) {
+            last = -1;
+        }
+
+        for (var block of this.slice(0, last)) {
             sReturn += block.GetDisplayStr()
+        }
+        if (this.state === CalcState.RESULT) {
+            sReturn += " ="
         }
         return sReturn
     }
@@ -362,6 +376,44 @@ class Equation {
     }
 
     *
+    slice(first = null, last = null) {
+        var it = null
+        if (first === null) {
+            first = 0
+        } else if (first < 0) {
+            first = this.length + first
+        }
+
+        if ((last === null) || last == 0) {
+            last = this.length
+        } else if (last < 0) {
+            last = this.length + last
+        }
+
+        if (first < last) {
+            let i = 0;
+            let current = this.head;
+            while (i < last) {
+                if (i >= first) {
+                    yield current
+                }
+                current = current.next;
+                i++
+            }
+        } else {
+            let i = this.length;
+            let current = this.tail;
+            while (i > last) {
+                if (i <= first) {
+                    yield current
+                }
+                current = current.previous;
+                i--
+            }
+        }
+    }
+
+    *
     generator() {
         if (this.length > 0) {
             let current = this.head;
@@ -391,8 +443,18 @@ export default class Calulatrice {
         return this.current.evalStr
     }
 
+    get state() {
+        return this.current.state
+    }
+
     get displayStr() {
         return this.current.displayStr
+    }
+
+    get currentStr() {
+
+        return this.current.currentStr
+
     }
 
     OnInput(input) {
