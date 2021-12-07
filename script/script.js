@@ -35,6 +35,7 @@ function Clear() {
 
 function Refresh() {
     document.getElementById("Display").value = myCalcul.displayStr;
+    document.getElementById("Current").value = myCalcul.currentStr;
 }
 
 
@@ -137,6 +138,7 @@ function ToggleXkey() {
 }
 
 TestMeteo()
+Refresh()
 window.Input = doInput
 window.Clear = Clear
 window.Delete = Delete
