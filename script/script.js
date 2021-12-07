@@ -39,7 +39,7 @@ function Refresh() {
 
 
 function TestMeteo() {
-    let requestURL = 'http://api.weatherapi.com/v1/current.json?key=f111c71466e14bca870155327210212%20&q=Montreal&aqi=no&lang=fr';
+    let requestURL = 'https://api.weatherapi.com/v1/current.json?key=f111c71466e14bca870155327210212%20&q=Montreal&aqi=no&lang=fr';
     let request = new XMLHttpRequest();
     request.open('GET', requestURL);
     request.responseType = 'json';
