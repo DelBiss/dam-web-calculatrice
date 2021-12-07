@@ -58,21 +58,70 @@ function TestMeteo() {
 var section = document.getElementById('meteo');
 
 function PopulateMeteo(jsonObj) {
-
-
     var myArticle = document.createElement('article');
-    var myH2 = document.createElement('p');
-    var myPara1 = document.createElement('p');
-    var myPara2 = document.createElement('p');
+    myArticle.className = "MeteoItem";
 
-    myH2.textContent = `${jsonObj.location.name}, ${jsonObj.location.region}`;
-    myPara1.textContent = `Courant: ${jsonObj.current.temp_c}℃, Resenti ${jsonObj.current.feelslike_c}℃`;
-    myPara2.textContent = jsonObj.current.condition.text;
+    // ===============================
+    var location = document.createElement('section');
+    location.className = "location";
 
+    var ville = document.createElement("p");
+    var province = document.createElement("p");
 
-    myArticle.appendChild(myH2);
-    myArticle.appendChild(myPara1);
-    myArticle.appendChild(myPara2);
+    ville.className = "ville";
+    province.className = "province";
+
+    ville.textContent = jsonObj.location.name;
+    province.textContent = jsonObj.location.region;
+
+    location.appendChild(ville);
+    location.appendChild(province);
+
+    // ===============================
+    var condition = document.createElement('section');
+    condition.className = "condition";
+
+    var img = document.createElement('img');
+
+    img.src = "http:" + jsonObj.current.condition.icon;
+    img.alt = jsonObj.current.condition.text;
+    img.title = jsonObj.current.condition.text;
+
+    // ------------------------------
+    var condition_text = document.createElement('section');
+    condition_text.className = "condition_text";
+
+    // ------------------------------
+    var temperature = document.createElement('section');
+    temperature.className = "temperature";
+
+    var courant = document.createElement("p");
+    var resenti = document.createElement("p");
+
+    courant.className = "courant";
+    resenti.className = "resenti";
+
+    courant.textContent = jsonObj.current.temp_c;
+    resenti.textContent = jsonObj.current.feelslike_c;
+
+    temperature.appendChild(courant);
+    temperature.appendChild(resenti);
+    condition_text.appendChild(temperature);
+    // ------------------------------
+    var textuelle = document.createElement("p");
+
+    textuelle.className = "textuelle";
+
+    textuelle.textContent = jsonObj.current.condition.text;
+
+    condition_text.appendChild(textuelle);
+    // ------------------------------
+    condition.appendChild(img);
+    condition.appendChild(condition_text);
+
+    // ===============================
+    myArticle.appendChild(location)
+    myArticle.appendChild(condition)
 
     section.appendChild(myArticle);
 
