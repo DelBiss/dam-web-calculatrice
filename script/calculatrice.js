@@ -91,7 +91,11 @@ class CalcNumber extends CalcBlock {
                     break;
 
                 case InputType.NUMBER:
-                    this.value += input
+                    if (this.value == "0") {
+                        this.value = input
+                    } else {
+                        this.value += input
+                    }
                     break;
             }
         }
@@ -110,6 +114,9 @@ class CalcNumber extends CalcBlock {
     }
 
     GetDisplayStr() {
+        if (this.next === null) {
+            return this.value;
+        }
         return String(Number(this.value));
     }
     GetEvalStr() {
@@ -142,7 +149,9 @@ class CalcResult extends CalcBlock {
     }
 
     static GetResult(evalStr) {
-        return String(eval(evalStr))
+        var nResult = eval(evalStr)
+
+        return String(Math.round(nResult * 10 ** 8) / 10 ** 8)
     }
 
     GetDisplayStr() {
