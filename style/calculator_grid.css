@@ -49,11 +49,6 @@ body {
     transition: all 1s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
-.more:hover {
-    background-color: red;
-    min-height: 12vh;
-}
-
 .base {
     grid-template-columns: repeat(4, 1fr) 1em;
     grid-auto-rows: 1fr;
