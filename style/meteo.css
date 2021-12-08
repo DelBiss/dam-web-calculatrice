@@ -3,7 +3,7 @@
     display: inline-flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: flex-start;
+    justify-content: stretch;
     align-items: stretch;
     align-content: stretch;
     font-family: 'Open Sans', sans-serif;
@@ -31,7 +31,7 @@
     border-style: solid;
     border-width: 1px;
     border-radius: 5px;
-    margin-block: 0.2em;
+    margin-block: 0.4em;
     margin-inline: 0.2em;
 }
 

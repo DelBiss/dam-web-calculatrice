@@ -1,13 +1,15 @@
 button {
     /* width: 25%; */
-    background: gray;
+    background: #0006;
     /* border-radius: 5px; */
-    /* border: 1px solid darkgray; */
+    border-color: #00000090;
     font-size: min(5vh, 7vw);
     text-align: center;
+    border-width: 2px;
 }
 
 .affichage>* {
-    background: gray;
+    background: none;
     border: 0;
+    color: black;
 }
