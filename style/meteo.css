@@ -1,5 +1,8 @@
-.MeteoItem,
-.condition_text {
+:root {
+    --anim: all 1s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.MeteoItem {
     display: inline-flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -7,11 +10,41 @@
     align-items: stretch;
     align-content: stretch;
     font-family: 'Open Sans', sans-serif;
+    background-color: #4a54b3;
+    border-color: black;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    margin-block: 0.4em;
+    margin-inline: 0.2em;
+    transition: var(--anim);
+    height: 25px;
+    width: 180px;
 }
 
-.location,
-.condition,
-.temperature {
+.condition_text {
+    display: inline-flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: stretch;
+    align-items: stretch;
+    align-content: stretch;
+    font-family: 'Open Sans', sans-serif;
+    margin-inline: 0.2em;
+}
+
+.location {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    align-content: flex-start;
+    align-items: first baseline;
+    padding-inline: 0.2em;
+}
+
+.condition {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -20,36 +53,18 @@
     align-content: flex-start;
 }
 
-.location {
-    align-items: first baseline;
-    padding-inline: 0.2em;
-}
-
-.MeteoItem {
-    background-color: #4a54b3;
-    border-color: black;
-    border-style: solid;
-    border-width: 1px;
-    border-radius: 5px;
-    margin-block: 0.4em;
-    margin-inline: 0.2em;
+.temperature {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    align-content: flex-start;
 }
 
 .MeteoItem p {
     margin-inline: 0.15em;
     margin-block: 0;
-}
-
-.condition {
-    /* background-color: #b99401; */
-}
-
-.condition_text {
-    margin-inline: 0.2em;
-}
-
-.temperature {
-    flex-direction: column;
 }
 
 .temperature p::after {
@@ -58,10 +73,21 @@
 
 .resenti {
     font-size: 0.7em;
+    transition: var(--anim);
+    height: 0px;
+    width: 0px;
+    overflow: hidden;
 }
 
 .resenti::before {
     content: "Resenti:";
+}
+
+.province {
+    /* display: none; */
+    height: 0px;
+    overflow: hidden;
+    transition: var(--anim);
 }
 
 
@@ -69,44 +95,59 @@
 
 .courant {
     font-size: 0.8em;
+    transition: var(--anim);
 }
 
 .condition img {
     height: 3vh;
     object-fit: cover;
     width: 6vh;
-}
-
-.textuelle,
-.resenti,
-.province {
-    display: none;
-}
-
-.resenti {
-    display: none;
+    transition: var(--anim);
 }
 
 .ville {
     font-weight: 600;
     font-size: 1em;
+    transition: var(--anim);
+}
+
+.textuelle {
+    height: 0px;
+    width: 0px;
+    overflow: hidden;
+    transition: var(--anim);
 }
 
 
 /* --------------------------- */
 
 #meteo.open .location {
-    border-bottom-width: 1px;
-    border-bottom-style: solid;
+    /* border-bottom-width: 1px; */
+    /* border-bottom-style: solid; */
 }
 
-#meteo.open .textuelle,
-#meteo.open .resenti,
-#meteo.open .province {
+#meteo.open .textuelle {
+    height: 22px;
+    width: 78px;
+}
+
+#meteo.open .resenti {
     display: block;
+    height: 15px;
+    width: 80px;
 }
 
-#meteo.open .MeteoItem,
+#meteo.open .province {
+    /* display: block; */
+    height: 22px;
+}
+
+#meteo.open .MeteoItem {
+    /* flex-direction: column; */
+    height: 72;
+    width: 260px;
+}
+
 #meteo.open .condition_text {
     flex-direction: column;
 }
@@ -122,5 +163,5 @@
 
 #meteo.open .condition img {
     height: 100%;
-    width: 100%;
+    /* width: 100%; */
 }
