@@ -72,7 +72,7 @@ body {
 }
 
 .base {
-    grid-template-columns: repeat(4, 1fr) 1em;
+    grid-template-columns: repeat(4, 1fr) 1.5em;
     grid-auto-rows: 1fr;
     grid-auto-flow: dense;
     display: grid;
@@ -82,7 +82,7 @@ body {
 
 .numpad {
     grid-column: 1/ span 3;
-    grid-row: 2/span 4;
+    grid-row: 1/span 4;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(4, 1fr);
@@ -92,9 +92,9 @@ body {
 
 .operation {
     grid-column: 4;
-    grid-row: 1/span 5;
+    grid-row: 1/span 4;
     display: grid;
-    grid-template-rows: repeat(5, 1fr);
+    grid-template-rows: repeat(4, 1fr);
     gap: var(--grid-gap);
 }
 
@@ -109,7 +109,7 @@ body {
 .overlay {
     /* background-color: rgba(0, 128, 0, 0.6); */
     grid-column: 1/-1;
-    grid-row: 1/6;
+    grid-row: 1/5;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -119,14 +119,12 @@ body {
     pointer-events: none;
 }
 
-.drawer {
-    background-color: rgba(182, 5, 5, 0.808);
-    width: 1em;
-    height: 100%;
-    transition: all 1s cubic-bezier(0.075, 0.82, 0.165, 1);
-    pointer-events: all;
-}
-
-.drawer.open {
-    width: 100%;
+.Xkeyboard {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: normal;
+    align-items: normal;
+    align-content: normal;
+    gap: calc(var(--grid-gap)*2);
 }

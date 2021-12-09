@@ -1,5 +1,50 @@
 :root {
-    --anim: all 1s cubic-bezier(0.075, 0.82, 0.165, 1);
+    --anim: all 2s cubic-bezier(0.075, 0.82, 0.165, 1);
+    --ButtonSize: calc(((min(100vw, 512px) - 1.5em)/4));
+    --XKey: calc(var(--ButtonSize) + 2em);
+}
+
+.expand {
+    color: white;
+    margin-block: auto;
+    transition: var(--anim);
+}
+
+.drawer .expand {
+    rotate: 90deg;
+}
+
+.drawer.open .expand {
+    rotate: 270deg;
+}
+
+.more.open .expand {
+    rotate: 180deg;
+}
+
+.drawer {
+    background-color: rgb(76, 102, 45);
+    width: 1.5em;
+    height: 100%;
+    transition: var(--anim);
+    display: flex;
+    pointer-events: all;
+    overflow: hidden;
+}
+
+.xp_button {
+    pointer-events: all;
+}
+
+.drawer button {
+    pointer-events: all;
+    width: var(--ButtonSize);
+    height: 25%;
+    background: #ffffff6e;
+}
+
+.drawer.open {
+    width: var(--XKey);
 }
 
 .MeteoItem {
@@ -121,47 +166,47 @@
 
 /* --------------------------- */
 
-#meteo.open .location {
+.open #meteo .location {
     /* border-bottom-width: 1px; */
     /* border-bottom-style: solid; */
 }
 
-#meteo.open .textuelle {
+.open #meteo .textuelle {
     height: 22px;
     width: 78px;
 }
 
-#meteo.open .resenti {
+.open #meteo .resenti {
     display: block;
     height: 15px;
     width: 80px;
 }
 
-#meteo.open .province {
+.open #meteo .province {
     /* display: block; */
     height: 22px;
 }
 
-#meteo.open .MeteoItem {
+.open #meteo .MeteoItem {
     /* flex-direction: column; */
     height: 72;
     width: 260px;
 }
 
-#meteo.open .condition_text {
+.open #meteo .condition_text {
     flex-direction: column;
 }
 
-#meteo.open .courant {
+.open #meteo .courant {
     font-size: 1.5em;
 }
 
-#meteo.open .ville {
+.open #meteo .ville {
     font-weight: 600;
     font-size: 1.2em;
 }
 
-#meteo.open .condition img {
+.open #meteo .condition img {
     height: 100%;
     /* width: 100%; */
 }

@@ -13,6 +13,150 @@ class Equation {
         }
     }
 
+    OnInput_Number(input) {
+        switch (this.state) {
+
+            case CalcState.NUMBER:
+            case CalcState.PARENTHESIS_OPEN:
+                this.tail.OnInput(c)
+                this.state = this.tail.state
+                break
+
+            case CalcState.OPERATOR:
+            case CalcState.NONE:
+                this.append(new CalcNumber())
+                this.OnInput(c)
+                break;
+
+            case CalcState.PARENTHESIS_CLOSE:
+                //Do nothing
+
+            case CalcState.RESULT:
+                //Should be handle by the calculator
+            default:
+                break;
+        }
+    }
+
+    OnInput_Operator(input) {
+        switch (this.state) {
+
+            case CalcState.OPERATOR:
+            case CalcState.PARENTHESIS_OPEN:
+                this.tail.OnInput(c)
+                this.state = this.tail.state
+                break
+
+            case CalcState.NUMBER:
+            case CalcState.PARENTHESIS_CLOSE:
+                this.append(new CalcOperator())
+                this.OnInput(c)
+                break;
+
+            case CalcState.NONE:
+                this.append(new CalcNumber())
+                this.OnInput(c)
+                break
+
+            case CalcState.RESULT:
+                //Should be handle by the calculator
+            default:
+                break;
+        }
+    }
+
+    OnInput_Result(input) {
+        switch (this.state) {
+
+            case CalcState.NUMBER:
+            case CalcState.PARENTHESIS_CLOSE:
+                this.append(new CalcResult(this.evalStr))
+                break
+
+            case CalcState.OPERATOR:
+                // If Result is asked when in OPERATOR, we calculate the result
+                // until now and use it's value to end the equation and redo the input
+                // This is the behaviour of the Windows Calculator 
+                var ResultUntilNow = this.getValue()
+                this.append(new CalcNumber(ResultUntilNow))
+                this.OnInput(c)
+                break;
+
+            case CalcState.PARENTHESIS_OPEN:
+                // We close all the parenthesis and redo the input
+                this.tail.Close()
+                this.state = this.tail.state
+                this.OnInput(c)
+                break
+
+            case CalcState.RESULT:
+                // This should be handle by the calculator
+            case CalcState.NONE:
+                // This should be handle by the calculator
+            default:
+                break;
+        }
+
+    }
+
+    OnInput_ParenthesisOpen(input) {
+        switch (this.state) {
+            case CalcState.NUMBER:
+                var parenthe = new CalcParentesis(this.tail.GetValue());
+                this.replaceLast(parenthe)
+                break
+
+            case CalcState.OPERATOR:
+                this.append(new CalcParentesis())
+                break;
+
+            case CalcState.PARENTHESIS_OPEN:
+                this.tail.OnInput(c)
+                this.state = this.tail.state
+                break
+
+            case CalcState.NONE:
+                this.append(new CalcParentesis())
+                break;
+
+            case CalcState.RESULT:
+                // TODO: To implement
+                break;
+
+            case CalcState.PARENTHESIS_CLOSE:
+                //Do nothing ?
+            default:
+                break;
+        }
+
+    }
+
+    OnInput_ParenthesisClose(input) {
+        switch (this.state) {
+            case CalcState.NUMBER:
+                var parenthe = new CalcParentesis(this.tail.GetValue());
+                this.replaceLast(parenthe)
+                break
+
+            case CalcState.OPERATOR:
+                this.append(new CalcParentesis())
+                break;
+
+            case CalcState.PARENTHESIS_OPEN:
+                this.tail.OnInput(c)
+                this.state = this.tail.state
+                break
+
+            case CalcState.NONE:
+            case CalcState.PARENTHESIS_CLOSE:
+            case CalcState.RESULT:
+                //Do nothing
+            default:
+                break;
+        }
+
+    }
+
     OnInput(input) {
         for (var c of input) {
             switch (this.state) {
@@ -26,16 +170,12 @@ class Equation {
                         case CalcState.NONE:
                             break
                         case CalcState.PARENTHESIS_OPEN:
-
                             this.append(new CalcParentesis())
                             break;
-
                         default:
                             console.log(GetInputType(c).name + " aren't handle when in " + this.state.name)
                     }
                     break;
-
-
                 case CalcState.NUMBER:
                     switch (GetInputState(c)) {
                         case CalcState.NUMBER:
@@ -283,7 +423,7 @@ class Equation {
     }
 }
 
-export default class Calulatrice {
+class Calculatrice {
     constructor() {
         this.current = new Equation();
         this.history = [];
@@ -350,3 +490,5 @@ export default class Calulatrice {
         }
     }
 }
+
+export { Calculatrice, Equation }

@@ -1,4 +1,5 @@
 import { InputType, CalcState, GetInputState, GetInputType } from "./input.js"
+import { Equation } from "./calculatrice.js";
 class CalcBlock {
     constructor() {
         this.previous = null;

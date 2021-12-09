@@ -28,14 +28,12 @@
             <input type="text" class="out_operation" id="Display" value="" readonly/>
             <input type="text" class="result" id="Current" readonly value="2+3" />
         </section>
-        <section class="more" id="meteo" onclick="ToggleMeteo()"></section>
+        <section class="more" id="meteo_drawer" onclick="ToggleMeteo()"><span class="material-icons expand">expand_more</span>
+            <section id="meteo"></section>
+        </section>
         <section class="base">
 
-            <section class="more_op">
-                <button class="button num" onclick="Clear()">AC</button>
-                <button class="button num" onclick="Input('(')">(</button>
-                <button class="button num" onclick="Input(')')">)</button>
-            </section>
+
             <section class="numpad">
                 <button class="button num" onclick="Input('7')">7</button>
                 <button class="button num" onclick="Input('8')">8</button>
@@ -48,17 +46,28 @@
                 <button class="button num" onclick="Input('3')">3</button>
                 <button class="button num" onclick="Input('0')">0</button>
                 <button class="button num" onclick="Input('.')">,</button>
-                <button class="button num" onclick="Delete()"><span class="material-icons">backspace</span></button>
+                <button class="button op" onclick="Input('=')">=</button>
             </section>
             <section class="operation">
                 <button class="button op" onclick="Input('/')">&#247;</button>
                 <button class="button op" onclick="Input('*')">&#215;</button>
                 <button class="button op" onclick="Input('-')">-</button>
                 <button class="button op" onclick="Input('+')">+</button>
-                <button class="button op" onclick="Input('=')">=</button>
             </section>
             <section class="overlay">
-                <section class="drawer" id="XKey" onclick="ToggleXkey()"></section>
+                <section class="drawer" id="XKey">
+                    <section class="xp_button" onclick="ToggleXkey()">
+                        <span class="material-icons expand">
+                            expand_more
+                        </span>
+                    </section>
+                    <section class="Xkeyboard">
+                        <button class="button num" onclick="Clear()">AC</button>
+                        <button class="button num" onclick="Input('(')">(</button>
+                        <button class="button num" onclick="Input(')')">)</button>
+                        <button class="button num" onclick="Delete()"><span class="material-icons">backspace</span></button>
+                    </section>
+                </section>
             </section>
         </section>
     </article>

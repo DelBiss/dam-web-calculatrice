@@ -1,4 +1,4 @@
-import Calculatrice from "./calculatrice/calculatrice.js";
+import { Calculatrice } from "./calculatrice/calculatrice.js";
 import { FetchMeteo } from "./meteo.js";
 
 function logKey(e) {
@@ -37,11 +37,13 @@ function Clear() {
 function Refresh() {
     document.getElementById("Display").value = myCalcul.displayStr;
     document.getElementById("Current").value = myCalcul.currentStr;
+    var section = document.getElementById('XKey');
+    section.classList.toggle("open", false);
 }
 
 
 function ToggleMeteo() {
-    var section = document.getElementById('meteo');
+    var section = document.getElementById('meteo_drawer');
     section.classList.toggle("open");
 }
 
