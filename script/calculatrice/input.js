@@ -1,13 +1,14 @@
 const InputType = Object.freeze({
-    NUMBER: { char: "0123456789", name: "INPUT.NUMBER" },
-    NUMBER_MOD: { char: "N", name: "INPUT.NUMBER_MOD" },
-    PARENTHESIS_OPEN: { char: "(", name: "INPUT.PARENTHESIS_OPEN" },
-    PARENTHESIS_CLOSE: { char: ")", name: "INPUT.PARENTHESIS_CLOSE" },
-    DECIMAL: { char: ".,", name: "INPUT.DECIMAL" },
-    EQUAL: { char: "=" + String.fromCharCode(13), name: "INPUT.EQUAL" },
-    OPERATION: { char: "+-*/", name: "INPUT.OPERATION" },
-    DELETE: { char: String.fromCharCode(8, 83), name: "INPUT.DELETE" },
-    NONE: { char: "", name: "INPUT.NONE" }
+    NUMBER: { keycode: [0], char: "0123456789", name: "INPUT.NUMBER", hasInput: true, inputPrefix: "num" },
+    NUMBER_MOD: { keycode: [0], char: "N", name: "INPUT.NUMBER_MOD", hasInput: true, inputPrefix: "mod" },
+    PARENTHESIS_OPEN: { keycode: [0], char: "(", name: "INPUT.PARENTHESIS_OPEN", hasInput: false },
+    PARENTHESIS_CLOSE: { keycode: [0], char: ")", name: "INPUT.PARENTHESIS_CLOSE", hasInput: false },
+    DECIMAL: { keycode: [0], char: ".,", name: "INPUT.DECIMAL", hasInput: false },
+    EQUAL: { keycode: [0], char: "=" + String.fromCharCode(13), name: "INPUT.EQUAL", hasInput: false },
+    OPERATION: { keycode: [0], char: "+-*/", name: "INPUT.OPERATION", hasInput: true, inputPrefix: "op" },
+    DELETE: { keycode: [0], char: String.fromCharCode(8, 83), name: "INPUT.DELETE", hasInput: false },
+    CLEAR: { keycode: [0], char: "", name: "INPUT.CLEAR", hasInput: false },
+    NONE: { keycode: [], char: "", name: "INPUT.NONE", hasInput: false }
 });
 
 const CalcState = Object.freeze({
@@ -19,6 +20,18 @@ const CalcState = Object.freeze({
     DELETE: { input: [InputType.DELETE], name: "STATE.DELETE" },
     NONE: { input: [], name: "STATE.NONE" }
 });
+
+function GetKeyType(input) {
+    var it = InputType.NONE;
+    for (const key in InputType) {
+
+        if (InputType[key].keycode.includes(input)) {
+            it = InputType[key];
+            break;
+        }
+    }
+    return it;
+}
 
 function GetInputType(input) {
     var it = InputType.NONE;
@@ -44,4 +57,15 @@ function GetInputState(input) {
     return it;
 }
 
-export { InputType, CalcState, GetInputState, GetInputType }
+function GetInputTypeState(input) {
+    var it = CalcState.NONE;
+    for (const key in CalcState) {
+        if (CalcState[key].input.includes(input)) {
+            it = CalcState[key];
+            break;
+        }
+    }
+    return it;
+}
+
+export { InputType, CalcState, GetInputState, GetInputType, GetInputTypeState }
